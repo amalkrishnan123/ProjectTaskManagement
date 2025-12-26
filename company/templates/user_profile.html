@@ -1,13 +1,68 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-<div class='container'>
-    <h1>PROFILE</H1>
-        <h3>You Can Update Your Profile Here Itself</h3>
-    <form method='post'>
+<style>
+    body {
+        background-image: url("{% static 'images/bgimage.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: -1;
+    }
+
+    /* Profile card styling */
+    .profile-card {
+        max-width: 520px;   /* 🔹 controls form size */
+        margin: 60px auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    }
+
+    .profile-card h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+    }
+
+    .profile-card h3 {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: #555;
+    }
+
+    .profile-card button {
+        width: 100%;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="profile-card p-4">
+
+    <h1 class="text-center mb-1">Profile</h1>
+    <h3 class="text-center mb-4">
+        You can update your profile details here
+    </h3>
+
+    <form method="post">
         {% csrf_token %}
-        {{user|crispy}}
-        <button type='submit'>save</button>
+        {{ user|crispy }}
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+    </form>
+
 </div>
 
 {% endblock content %}

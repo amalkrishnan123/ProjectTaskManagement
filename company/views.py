@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.paginator import Paginator
 
 # Create your views here.
 def generate_password(length=8):
@@ -125,6 +126,9 @@ def task_list_admin(request):
     if not request.user.is_staff:
         return redirect('home')
     task=Task.objects.all()
+    paginator = Paginator(task, 5)  # 5 rows per page
+    page_number = request.GET.get('page')
+    task = paginator.get_page(page_number)
     return render(request,'task_list.html',{'task':task})
 
 @login_required
@@ -174,6 +178,9 @@ def user_task_details(request):
         tsk=tsk.filter(priority=priority)
     if search:
         tsk = tsk.filter(Q(title__icontains=search) | Q(project__name__icontains=search))
+    paginator = Paginator(tsk, 5)  # 5 rows per page
+    page_number = request.GET.get('page')
+    tsk = paginator.get_page(page_number)
     return render(request,'user_task_details.html',{'tsk':tsk})
 
 @login_required

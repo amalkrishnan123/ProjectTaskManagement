@@ -1,10 +1,24 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <style>
-    body {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
+        body {
+            background-image: url("{% static 'images/bgimage.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+    /* Dark overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: -1;
+        }
 </style>
 
 <div class="container mt-5">
