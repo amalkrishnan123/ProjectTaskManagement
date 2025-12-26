@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+ <h1>ADMIN PAGE</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Project Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proj in projects %}
+                <tr>
+                    <td>{{ proj.name }}</td>
+                    <td>{{ proj.description }}</td>
+                    <td>{{ proj.startdate }}</td>
+                    <td>{{ proj.enddate }}</td>
+                    <td><a href="{% url 'edit_project' proj.id %}">Edit</a> | <a href="{% url "project_delete" proj.id%}">Delete</a></td>
+                </tr>
+                {% endfor %}
+                <a href="{% url "projectpage" %}"><div class="btn btn-primary">Add project</div></a>
+            </tbody>
+        </table>
+{% endblock content %}

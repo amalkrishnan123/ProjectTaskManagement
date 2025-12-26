@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- FILTER SECTION -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+
+            <h4 class="mb-3 fw-bold">Filter Tasks</h4>
+
+            <form method="get" class="row g-3 align-items-end">
+
+    <!-- SEARCH -->
+    <div class="col-md-4">
+        <label class="form-label fw-semibold">Search</label>
+        <input type="text"
+               class="form-control"
+               placeholder="Search task or project"
+               name="search"
+               value="{{ request.GET.search }}">
+    </div>
+
+    <!-- STATUS -->
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">Status</label>
+        <select name="status" class="form-select">
+            <option value="">All</option>
+            <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>
+                Pending
+            </option>
+            <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>
+                In Progress
+            </option>
+            <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>
+                Completed
+            </option>
+        </select>
+    </div>
+
+    <!-- PRIORITY -->
+    <div class="col-md-3">
+        <label class="form-label fw-semibold">Priority</label>
+        <select name="priority" class="form-select">
+            <option value="">All</option>
+            <option value="low" {% if request.GET.priority == 'low' %}selected{% endif %}>
+                Low
+            </option>
+            <option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>
+                Medium
+            </option>
+            <option value="high" {% if request.GET.priority == 'high' %}selected{% endif %}>
+                High
+            </option>
+        </select>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="col-md-2 d-grid gap-2">
+        <button type="submit" class="btn btn-primary">
+            Apply
+        </button>
+
+        <!-- CLEAR BUTTON -->
+        <a href="{% url 'user_task_details' %}" class="btn btn-outline-secondary">
+            Clear
+        </a>
+    </div>
+
+</form>
+
+
+        </div>
+    </div>
+
+    <!-- TABLE SECTION -->
+    <h3 class="text-center mb-4 fw-bold text-white">
+        YOUR TASK & PROJECT DETAILS
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Project</th>
+                    <th>Task</th>
+                    <th>Created</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for proj in tsk %}
+                <tr>
+                    <td>{{ proj.project.name }}</td>
+                    <td>{{ proj.title }}</td>
+                    <td>{{ proj.created_at|date:"d M Y" }}</td>
+                    <td>{{ proj.due_date|date:"d M Y" }}</td>
+
+                    <td>
+                        {% if proj.priority == 'low' %}
+                            <span class="badge bg-secondary">Low</span>
+                        {% elif proj.priority == 'medium' %}
+                            <span class="badge bg-primary">Medium</span>
+                        {% else %}
+                            <span class="badge bg-danger">High</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if proj.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif proj.status == 'in_progress' %}
+                            <span class="badge bg-info">In Progress</span>
+                        {% else %}
+                            <span class="badge bg-success">Completed</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if proj.status == 'pending' %}
+                            <a href="{% url 'user_task_update' proj.id 'in_progress' %}"
+                               class="btn btn-sm btn-outline-warning">
+                                In Progress
+                            </a>
+                        {% elif proj.status == 'in_progress' %}
+                            <a href="{% url 'user_task_update' proj.id 'completed' %}"
+                               class="btn btn-sm btn-outline-success">
+                                Complete
+                            </a>
+                        {% else %}
+                            <span class="text-success fw-bold">Done</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-muted">
+                        No tasks found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock content %}

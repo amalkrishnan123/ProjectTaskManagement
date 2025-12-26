@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="row g-4">
+
+        <!-- Total Projects -->
+        <div class="col-md-6">
+            <div class="card text-center shadow-lg h-100">
+                <div class="card-header bg-warning fw-bold">
+                    Projects
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Total Projects</h5>
+                    <h2 class="fw-bold text-dark">
+                        {{ pro_count }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Tasks -->
+        <div class="col-md-6">
+            <div class="card text-center shadow-lg h-100">
+                <div class="card-header bg-info fw-bold text-white">
+                    Tasks
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Total Tasks</h5>
+                    <h2 class="fw-bold">
+                        {{ task_count }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}
