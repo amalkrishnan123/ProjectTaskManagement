@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .forms import ProjectForm,TaskForm,EmployeeForm,User_Update
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
-from .models import Project,Task,Employee
+from .models import Project,Task,Employee,TaskUpdate
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import random,string
@@ -125,7 +125,7 @@ def project_list_admin(request):
 def task_list_admin(request):
     if not request.user.is_staff:
         return redirect('home')
-    task=Task.objects.all()
+    task = Task.objects.select_related('project','assigned_to').prefetch_related('updates').order_by('-created_at')
     paginator = Paginator(task, 5)  # 5 rows per page
     page_number = request.GET.get('page')
     task = paginator.get_page(page_number)
@@ -295,5 +295,17 @@ def unblock_employee(request,id):
     user.save()
     return redirect('employee_list')
 
+def emp_task_update_page(request):
+    task=Task.objects.filter(assigned_to=request.user).select_related('project')
+    if not task:
+        messages.error(request,'No More task in Progress')
+    return render(request,'employee_task_update.html',{'task':task})
+
+def add_updation_task(request,id):
+    tast_obj=get_object_or_404(Task,id=id)
+    if request.POST:
+        update=request.POST.get('updation')
+        TaskUpdate.objects.create(comment=update,employee=request.user,task=tast_obj)
+        return redirect('task_update')
 
 

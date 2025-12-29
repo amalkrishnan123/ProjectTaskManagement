@@ -24,4 +24,6 @@ urlpatterns = [
     path('employee_profile',views.user_profile,name='emp_profile'),
     path('block_emp,<int:id>',views.block_employee,name='block'),
     path('unblock_emp,<int:id>',views.unblock_employee,name='unblock'),
+    path('task_update/',views.emp_task_update_page,name='task_update'),
+    path('add_updation/<int:id>',views.add_updation_task,name='add_updation')
 ]
