@@ -13,6 +13,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -141,3 +149,4 @@ EMAIL_HOST_USER = 'amalnanna947@gmail.com'
 EMAIL_HOST_PASSWORD = 'nypm ifrg crdn ppoe'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+

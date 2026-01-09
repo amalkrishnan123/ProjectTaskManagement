@@ -11,6 +11,7 @@ from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.paginator import Paginator
+from .tasks import send_employee_credentials
 
 # Create your views here.
 def generate_password(length=8):
@@ -203,7 +204,7 @@ def employee_create(request):
             emp.emp_id=emp_id
             emp.user=user
             emp.save()
-            send_employee_credentials(username, password)
+            send_employee_credentials.delay(username, password)
             return redirect('admin_home')
     return render(request,'admin_employee_create.html',{'form':form})
 
@@ -227,29 +228,7 @@ def employee_delete(request,id):
     emp.delete()
     return redirect('admin_employee_list.html')
 
-def send_employee_credentials(email, password):
-    subject = 'Your Login Credentials'
-    message = f"""
-Dear User,
 
-Your account has been created successfully.
-
-Username: {email}
-Password: {password}
-
-Please log in and change your password after first login.
-
-Regards,
-Admin Team
-"""
-
-    send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,   # Admin email
-        [email],                    # Employee email
-        fail_silently=False,
-    )
 
 @login_required
 def force_change_credentials(request):
